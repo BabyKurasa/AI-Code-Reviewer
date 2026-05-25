@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Code Reviewer - Free Online Code Analysis Tool</title>
+    <title>AI Code Reviewer - Professional Code Analysis Tool</title>
     <style>
         * {
             margin: 0;
@@ -17,160 +17,303 @@
             min-height: 100vh;
         }
         
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 20px;
+        .app-container {
+            display: flex;
+            min-height: 100vh;
         }
         
-        .header {
-            background: white;
-            border-radius: 16px;
-            padding: 25px 30px;
-            margin-bottom: 20px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        /* Sidebar Styles */
+        .sidebar {
+            width: 280px;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 24px;
+            border-right: 1px solid rgba(51, 65, 85, 0.5);
+            position: fixed;
+            left: 0;
+            top: 0;
+            height: 100vh;
+            overflow-y: auto;
+            color: white;
         }
         
-        .header h1 {
-            font-size: 32px;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+        .sidebar-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .sidebar-header .icon {
+            font-size: 48px;
+            margin-bottom: 10px;
+        }
+        
+        .sidebar-header h2 {
+            font-size: 20px;
             margin-bottom: 5px;
         }
         
-        .header p {
-            color: #666;
+        .sidebar-header p {
+            font-size: 12px;
+            opacity: 0.7;
         }
         
-        .stats-bar {
-            display: flex;
-            gap: 20px;
-            margin-top: 15px;
-            flex-wrap: wrap;
+        .stat-section {
+            margin-bottom: 30px;
         }
         
-        .stat-card {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            padding: 10px 20px;
-            border-radius: 10px;
+        .stat-section h3 {
             font-size: 14px;
-        }
-        
-        .grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-        }
-        
-        .card {
-            background: white;
-            border-radius: 16px;
-            padding: 25px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
-        }
-        
-        .card h3 {
-            margin-bottom: 15px;
-            color: #333;
-            font-size: 18px;
-        }
-        
-        .language-selector {
-            padding: 10px 15px;
-            border-radius: 10px;
-            border: 2px solid #e2e8f0;
-            font-size: 14px;
-            cursor: pointer;
-            background: white;
-        }
-        
-        button {
-            padding: 10px 20px;
-            border-radius: 10px;
-            border: none;
-            font-size: 14px;
-            cursor: pointer;
-            transition: all 0.3s;
+            margin-bottom: 12px;
             font-weight: 600;
         }
         
+        .stat-box {
+            background: rgba(30, 41, 59, 0.8);
+            padding: 12px;
+            border-radius: 10px;
+        }
+        
+        .stat-box p {
+            margin: 5px 0;
+            font-size: 14px;
+        }
+        
+        .clear-btn {
+            width: 100%;
+            margin-top: 10px;
+            padding: 8px;
+            background: #dc2626;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        
+        .clear-btn:hover {
+            background: #b91c1c;
+        }
+        
+        .history-item {
+            background: rgba(30, 41, 59, 0.8);
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            font-size: 12px;
+        }
+        
+        .history-item strong {
+            display: block;
+            margin-bottom: 4px;
+        }
+        
+        .history-item small {
+            opacity: 0.7;
+        }
+        
+        /* Main Content Styles */
+        .main-content {
+            margin-left: 280px;
+            flex: 1;
+            min-height: 100vh;
+        }
+        
+        /* Header Styles */
+        .header {
+            background: rgba(30, 41, 59, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 16px 24px;
+            border-bottom: 1px solid #334155;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        
+        .language-select {
+            padding: 10px 16px;
+            border-radius: 10px;
+            background: #334155;
+            color: white;
+            border: 1px solid #475569;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            border-radius: 10px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+        
         .btn-primary {
-            background: linear-gradient(135deg, #667eea, #764ba2);
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
             color: white;
         }
         
-        .btn-secondary {
-            background: #f0f4f8;
-            color: #333;
-        }
-        
-        button:hover {
+        .btn-primary:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 12px rgba(59,130,246,0.4);
         }
         
-        textarea {
-            width: 100%;
-            height: 450px;
-            font-family: 'Courier New', 'Fira Code', monospace;
+        .btn-danger {
+            background: #ef4444;
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            background: #dc2626;
+        }
+        
+        .btn-secondary {
+            background: #334155;
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background: #475569;
+        }
+        
+        /* Content Area */
+        .content {
+            padding: 24px;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 24px;
+        }
+        
+        .stat-card {
+            background: rgba(30, 41, 59, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 20px;
+            border: 1px solid #334155;
+            color: white;
+        }
+        
+        .stat-card p:first-child {
+            color: #94a3b8;
             font-size: 14px;
-            padding: 15px;
-            border-radius: 12px;
-            border: 2px solid #e2e8f0;
-            resize: vertical;
-            background: #fafbfc;
+            margin-bottom: 8px;
         }
         
-        textarea:focus {
-            outline: none;
-            border-color: #667eea;
+        .stat-card .stat-value {
+            font-size: 32px;
+            font-weight: bold;
         }
         
-        .results {
-            background: #f8fafc;
-            border-radius: 12px;
+        /* Editor Grid */
+        .editor-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+        
+        .editor-card, .results-card {
+            background: rgba(30, 41, 59, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            border: 1px solid #334155;
+            overflow: hidden;
+        }
+        
+        .card-header {
+            padding: 16px 20px;
+            border-bottom: 1px solid #334155;
+            font-weight: 600;
+            color: white;
+            background: rgba(15, 23, 42, 0.5);
+        }
+        
+        .editor-container {
+            height: 500px;
+        }
+        
+        .results-container {
             padding: 20px;
             max-height: 550px;
             overflow-y: auto;
         }
         
-        .bug {
+        /* Results Styles */
+        .status-badge {
+            padding: 12px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: 500;
+        }
+        
+        .status-success {
+            background: #dcfce7;
+            color: #16a34a;
+        }
+        
+        .status-error {
+            background: #fee2e2;
             color: #dc2626;
-            margin: 10px 0;
-            padding: 12px;
-            background: #fef2f2;
-            border-radius: 10px;
-            border-left: 4px solid #dc2626;
         }
         
-        .suggestion {
-            color: #059669;
-            margin: 10px 0;
-            padding: 12px;
-            background: #ecfdf5;
-            border-radius: 10px;
-            border-left: 4px solid #059669;
+        .complexity-box {
+            margin-bottom: 20px;
         }
         
-        .info {
-            color: #3b82f6;
-            margin: 10px 0;
-            padding: 12px;
-            background: #eff6ff;
-            border-radius: 10px;
-            border-left: 4px solid #3b82f6;
+        .complexity-box strong {
+            color: white;
         }
         
-        .complexity-simple { color: #059669; font-weight: bold; }
-        .complexity-moderate { color: #d97706; font-weight: bold; }
-        .complexity-complex { color: #dc2626; font-weight: bold; }
+        .complexity-value {
+            margin-top: 8px;
+            padding: 12px;
+            background: #1e293b;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        
+        .complexity-simple { color: #10b981; }
+        .complexity-moderate { color: #f59e0b; }
+        .complexity-complex { color: #ef4444; }
+        
+        .score-section {
+            margin-bottom: 20px;
+        }
+        
+        .score-section strong {
+            color: white;
+        }
+        
+        .score-value {
+            font-size: 36px;
+            font-weight: bold;
+            margin: 8px 0;
+        }
         
         .quality-bar {
-            background: #e2e8f0;
-            height: 10px;
-            border-radius: 5px;
+            height: 8px;
+            background: #1e293b;
+            border-radius: 4px;
             overflow: hidden;
             margin-top: 8px;
         }
@@ -178,420 +321,245 @@
         .quality-fill {
             height: 100%;
             transition: width 0.5s ease;
-            border-radius: 5px;
+            border-radius: 4px;
         }
         
-        .btn-group {
-            display: flex;
-            gap: 10px;
-            margin-top: 15px;
-            flex-wrap: wrap;
-        }
+        .score-good { color: #10b981; }
+        .score-average { color: #f59e0b; }
+        .score-bad { color: #ef4444; }
         
-        .score-circle {
-            text-align: center;
-            padding: 20px;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            border-radius: 12px;
-            color: white;
+        .suggestions-list, .bugs-list {
             margin-bottom: 20px;
         }
         
-        .score-number {
-            font-size: 48px;
-            font-weight: bold;
-        }
-        
-        @media (max-width: 768px) {
-            .grid {
-                grid-template-columns: 1fr;
-            }
-            .header h1 {
-                font-size: 24px;
-            }
-        }
-        
-        footer {
-            text-align: center;
-            margin-top: 20px;
-            padding: 20px;
+        .suggestions-list h3, .bugs-list h3 {
             color: white;
-            opacity: 0.8;
+            font-size: 14px;
+            margin-bottom: 12px;
         }
         
-        .loading {
+        .suggestion-item {
+            padding: 12px;
+            background: #1e293b;
+            border-radius: 10px;
+            margin-bottom: 8px;
+            border-left: 3px solid #3b82f6;
+            color: #cbd5e1;
+            font-size: 13px;
+        }
+        
+        .bug-item {
+            padding: 12px;
+            background: #1e293b;
+            border-radius: 10px;
+            margin-bottom: 8px;
+            border-left: 3px solid #ef4444;
+            color: #fca5a5;
+            font-size: 13px;
+        }
+        
+        .empty-state {
             text-align: center;
-            padding: 40px;
+            padding: 60px 20px;
+            color: #94a3b8;
+        }
+        
+        .empty-state .emoji {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+        
+        .loading-state {
+            text-align: center;
+            padding: 60px 20px;
         }
         
         .spinner {
-            width: 40px;
-            height: 40px;
-            border: 3px solid #e2e8f0;
-            border-top-color: #667eea;
+            width: 50px;
+            height: 50px;
+            border: 3px solid #334155;
+            border-top-color: #3b82f6;
             border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-            margin: 0 auto 15px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 16px;
         }
         
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
+        
+        .detected-badge {
+            background: #10b981;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            margin-left: 10px;
+        }
+        
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 0;
+                display: none;
+            }
+            .main-content {
+                margin-left: 0;
+            }
+            .editor-grid {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">
-                <div>
-                    <h1>🤖 AI Code Reviewer</h1>
-                    <p>Professional Code Analysis Tool - No Backend Required</p>
-                </div>
-                <div>
-                    <select id="languageSelect" class="language-selector">
-                        <option value="python">🐍 Python</option>
-                        <option value="javascript">📜 JavaScript</option>
-                        <option value="java">☕ Java</option>
-                        <option value="csharp">🔷 C#</option>
-                        <option value="cpp">⚙️ C++</option>
-                        <option value="go">🐹 Go</option>
-                        <option value="rust">🦀 Rust</option>
-                        <option value="ruby">💎 Ruby</option>
-                        <option value="html">🌐 HTML</option>
-                        <option value="css">🎨 CSS</option>
-                    </select>
-                </div>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <div class="icon">🤖</div>
+                <h2>AI Code Reviewer</h2>
+                <p>Professional Code Analysis</p>
             </div>
-            <div class="stats-bar">
-                <div class="stat-card">📊 Analyzer Ready</div>
-                <div class="stat-card">🔍 10+ Languages</div>
-                <div class="stat-card">⚡ Instant Results</div>
-            </div>
-        </div>
-        
-        <div class="grid">
-            <div class="card">
-                <h3>📝 Code Editor</h3>
-                <textarea id="codeInput" placeholder="Write or paste your code here..."></textarea>
-                <div class="btn-group">
-                    <button class="btn-primary" onclick="loadExample()">📝 Load Example</button>
-                    <button class="btn-secondary" onclick="clearCode()">🗑️ Clear</button>
-                    <button class="btn-primary" onclick="analyzeCode()">🚀 Analyze Code</button>
+            
+            <div class="stat-section">
+                <h3>📊 Statistics</h3>
+                <div class="stat-box">
+                    <p>Total Reviews: <strong id="reviewCount">0</strong></p>
+                    <button class="clear-btn" onclick="clearAllHistory()">Clear All History</button>
                 </div>
             </div>
             
-            <div class="card">
-                <h3>🧠 Analysis Results</h3>
-                <div id="resultsContainer">
-                    <div class="results" style="text-align: center;">
-                        <p style="color: #999;">✨ Click "Analyze Code" to review your code</p>
-                        <p style="color: #999; font-size: 12px; margin-top: 10px;">Detects bugs, security issues, and suggests improvements</p>
+            <div class="stat-section" id="historySection">
+                <h3>📜 Recent Reviews</h3>
+                <div id="historyList"></div>
+            </div>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Header -->
+            <div class="header">
+                <div class="header-content">
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <select id="languageSelect" class="language-select">
+                            <option value="auto">🔍 Auto Detect</option>
+                            <option value="python">🐍 Python</option>
+                            <option value="javascript">📜 JavaScript</option>
+                            <option value="java">☕ Java</option>
+                            <option value="csharp">🔷 C#</option>
+                            <option value="cpp">⚙️ C++</option>
+                            <option value="go">🐹 Go</option>
+                            <option value="rust">🦀 Rust</option>
+                            <option value="ruby">💎 Ruby</option>
+                        </select>
+                        <span id="detectedBadge" class="detected-badge" style="display: none;"></span>
+                    </div>
+                    
+                    <div class="button-group">
+                        <button class="btn btn-primary" onclick="loadExample()">📝 Example</button>
+                        <button class="btn btn-secondary" onclick="clearCode()">🗑️ Clear</button>
+                        <button class="btn btn-secondary" onclick="toggleTheme()">🌙 Dark</button>
+                        <button class="btn btn-primary" onclick="analyzeCode()" id="reviewBtn">🚀 Review Code</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Content -->
+            <div class="content">
+                <div class="stats-grid" id="statsGrid">
+                    <div class="stat-card">
+                        <p>Total Reviews</p>
+                        <div class="stat-value" id="statTotal">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <p>Quality Score</p>
+                        <div class="stat-value" id="statQuality">0%</div>
+                    </div>
+                    <div class="stat-card">
+                        <p>Suggestions</p>
+                        <div class="stat-value" id="statSuggestions">0</div>
+                    </div>
+                </div>
+                
+                <div class="editor-grid">
+                    <!-- Code Editor -->
+                    <div class="editor-card">
+                        <div class="card-header">📝 Code Editor <span id="editorLangLabel">(PYTHON)</span></div>
+                        <textarea id="codeInput" class="editor-container" placeholder="Write or paste your code here..." style="width: 100%; padding: 16px; background: #0f172a; color: #e2e8f0; border: none; font-family: 'Courier New', monospace; font-size: 14px; resize: vertical;"></textarea>
+                    </div>
+                    
+                    <!-- Results Panel -->
+                    <div class="results-card">
+                        <div class="card-header">🧠 AI Analysis Results</div>
+                        <div class="results-container" id="resultsContainer">
+                            <div class="empty-state">
+                                <div class="emoji">✨</div>
+                                <p>Select a language, write code, and click "Review Code"</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-        
-        <footer>
-            <p>🔍 Analyzes Python, JavaScript, Java, C#, C++, Go, Rust, Ruby, HTML, CSS | Free & Unlimited</p>
-        </footer>
     </div>
     
     <script>
-        let analysisCount = 0;
+        let reviewHistory = [];
+        let currentResult = null;
         
-        const examples = {
-            python: `# Python Calculator - Complete Example
-def calculate(a, b):
-    """Perform basic arithmetic operations"""
-    results = {
-        'sum': a + b,
-        'difference': a - b,
-        'product': a * b,
-        'division': a / b if b != 0 else 'undefined'
-    }
-    return results
-
-# Test the function
-num1 = 10
-num2 = 5
-results = calculate(num1, num2)
-
-print(f"Numbers: {num1} and {num2}")
-print(f"Sum: {results['sum']}")
-print(f"Difference: {results['difference']}")
-print(f"Product: {results['product']}")
-print(f"Division: {results['division']}")
-
-# Bonus: Check if number is even
-def is_even(n):
-    return n % 2 == 0
-
-print(f"Is {num1} even? {is_even(num1)}")`,
-            
-            javascript: `// JavaScript Calculator - Complete Example
-function calculate(a, b) {
-    return {
-        sum: a + b,
-        difference: a - b,
-        product: a * b,
-        division: b !== 0 ? a / b : 'undefined'
-    };
-}
-
-// Test the function
-let num1 = 10;
-let num2 = 5;
-let results = calculate(num1, num2);
-
-console.log(\`Numbers: \${num1} and \${num2}\`);
-console.log(\`Sum: \${results.sum}\`);
-console.log(\`Difference: \${results.difference}\`);
-console.log(\`Product: \${results.product}\`);
-console.log(\`Division: \${results.division}\`);
-
-// Arrow function example
-const isEven = n => n % 2 === 0;
-console.log(\`Is \${num1} even? \${isEven(num1)}\`);`,
-            
-            java: `// Java Calculator - Complete Example
-public class Calculator {
-    public static int[] calculate(int a, int b) {
-        return new int[]{a + b, a - b, a * b};
-    }
-    
-    public static double divide(int a, int b) {
-        if (b == 0) {
-            throw new IllegalArgumentException("Cannot divide by zero");
-        }
-        return (double) a / b;
-    }
-    
-    public static boolean isEven(int n) {
-        return n % 2 == 0;
-    }
-    
-    public static void main(String[] args) {
-        int num1 = 10;
-        int num2 = 5;
-        
-        int[] results = calculate(num1, num2);
-        System.out.println("Numbers: " + num1 + " and " + num2);
-        System.out.println("Sum: " + results[0]);
-        System.out.println("Difference: " + results[1]);
-        System.out.println("Product: " + results[2]);
-        System.out.println("Division: " + divide(num1, num2));
-        System.out.println("Is " + num1 + " even? " + isEven(num1));
-    }
-}`,
-            
-            csharp: `// C# Calculator - Complete Example
-using System;
-
-class Program {
-    static (int sum, int diff, int prod) Calculate(int a, int b) {
-        return (a + b, a - b, a * b);
-    }
-    
-    static double Divide(int a, int b) {
-        if (b == 0) throw new DivideByZeroException();
-        return (double)a / b;
-    }
-    
-    static bool IsEven(int n) => n % 2 == 0;
-    
-    static void Main() {
-        int num1 = 10, num2 = 5;
-        var results = Calculate(num1, num2);
-        
-        Console.WriteLine($"Numbers: {num1} and {num2}");
-        Console.WriteLine($"Sum: {results.sum}");
-        Console.WriteLine($"Difference: {results.diff}");
-        Console.WriteLine($"Product: {results.prod}");
-        Console.WriteLine($"Division: {Divide(num1, num2)}");
-        Console.WriteLine($"Is {num1} even? {IsEven(num1)}");
-    }
-}`,
-            
-            cpp: `// C++ Calculator - Complete Example
-#include <iostream>
-using namespace std;
-
-struct Results {
-    int sum, diff, prod;
-};
-
-Results calculate(int a, int b) {
-    return {a + b, a - b, a * b};
-}
-
-double divide(int a, int b) {
-    if (b == 0) throw "Division by zero!";
-    return (double)a / b;
-}
-
-bool isEven(int n) {
-    return n % 2 == 0;
-}
-
-int main() {
-    int num1 = 10, num2 = 5;
-    auto results = calculate(num1, num2);
-    
-    cout << "Numbers: " << num1 << " and " << num2 << endl;
-    cout << "Sum: " << results.sum << endl;
-    cout << "Difference: " << results.diff << endl;
-    cout << "Product: " << results.prod << endl;
-    cout << "Division: " << divide(num1, num2) << endl;
-    cout << "Is " << num1 << " even? " << (isEven(num1) ? "true" : "false") << endl;
-    
-    return 0;
-}`,
-            
-            go: `// Go Calculator - Complete Example
-package main
-
-import "fmt"
-
-type Results struct {
-    Sum, Diff, Prod int
-}
-
-func calculate(a, b int) Results {
-    return Results{a + b, a - b, a * b}
-}
-
-func divide(a, b int) float64 {
-    if b == 0 {
-        panic("division by zero")
-    }
-    return float64(a) / float64(b)
-}
-
-func isEven(n int) bool {
-    return n%2 == 0
-}
-
-func main() {
-    num1, num2 := 10, 5
-    results := calculate(num1, num2)
-    
-    fmt.Printf("Numbers: %d and %d\\n", num1, num2)
-    fmt.Printf("Sum: %d\\n", results.Sum)
-    fmt.Printf("Difference: %d\\n", results.Diff)
-    fmt.Printf("Product: %d\\n", results.Prod)
-    fmt.Printf("Division: %.2f\\n", divide(num1, num2))
-    fmt.Printf("Is %d even? %t\\n", num1, isEven(num1))
-}`,
-            
-            rust: `// Rust Calculator - Complete Example
-fn calculate(a: i32, b: i32) -> (i32, i32, i32) {
-    (a + b, a - b, a * b)
-}
-
-fn divide(a: i32, b: i32) -> f64 {
-    if b == 0 {
-        panic!("Division by zero!");
-    }
-    a as f64 / b as f64
-}
-
-fn is_even(n: i32) -> bool {
-    n % 2 == 0
-}
-
-fn main() {
-    let (num1, num2) = (10, 5);
-    let (sum, diff, prod) = calculate(num1, num2);
-    
-    println!("Numbers: {} and {}", num1, num2);
-    println!("Sum: {}", sum);
-    println!("Difference: {}", diff);
-    println!("Product: {}", prod);
-    println!("Division: {:.2}", divide(num1, num2));
-    println!("Is {} even? {}", num1, is_even(num1));
-}`,
-            
-            ruby: `# Ruby Calculator - Complete Example
-def calculate(a, b)
-    { sum: a + b, difference: a - b, product: a * b }
-end
-
-def divide(a, b)
-    raise "Division by zero!" if b == 0
-    a.to_f / b
-end
-
-def is_even(n)
-    n.even?
-end
-
-num1, num2 = 10, 5
-results = calculate(num1, num2)
-
-puts "Numbers: #{num1} and #{num2}"
-puts "Sum: #{results[:sum]}"
-puts "Difference: #{results[:difference]}"
-puts "Product: #{results[:product]}"
-puts "Division: #{divide(num1, num2)}"
-puts "Is #{num1} even? #{is_even(num1)}"`,
-            
-            html: `<!-- HTML Example -->
-<!DOCTYPE html>
-<html>
-<head>
-    <title>My Page</title>
-</head>
-<body>
-    <h1>Hello World</h1>
-    <p>This is a paragraph.</p>
-    <button>Click Me</button>
-</body>
-</html>`,
-            
-            css: `/* CSS Example */
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 20px;
-    background: #f0f0f0;
-}
-
-.container {
-    max-width: 1200px;
-    margin: 0 auto;
-}
-
-.button {
-    background: blue;
-    color: white;
-    padding: 10px 20px;
-    border-radius: 5px;
-}
-
-.button:hover {
-    background: darkblue;
-}`
-        };
-        
-        function loadExample() {
-            const lang = document.getElementById('languageSelect').value;
-            const exampleCode = examples[lang];
-            if (exampleCode) {
-                document.getElementById('codeInput').value = exampleCode;
-                showToast('✓ Example loaded! Click "Analyze Code" to review', 'success');
+        // Load history from localStorage
+        function loadHistory() {
+            const saved = localStorage.getItem('codeReviews');
+            if (saved) {
+                reviewHistory = JSON.parse(saved);
+                updateHistoryDisplay();
+                updateStats();
             }
         }
         
-        function clearCode() {
-            document.getElementById('codeInput').value = '';
-            document.getElementById('resultsContainer').innerHTML = `
-                <div class="results" style="text-align: center;">
-                    <p style="color: #999;">✨ Code cleared. Write new code to analyze.</p>
-                </div>
-            `;
-            showToast('✓ Editor cleared', 'info');
+        // Save history to localStorage
+        function saveHistory() {
+            localStorage.setItem('codeReviews', JSON.stringify(reviewHistory.slice(0, 10)));
+            updateHistoryDisplay();
+            updateStats();
         }
         
+        // Update history display
+        function updateHistoryDisplay() {
+            const historyList = document.getElementById('historyList');
+            if (reviewHistory.length === 0) {
+                historyList.innerHTML = '<div class="history-item" style="text-align: center; opacity: 0.7;">No reviews yet</div>';
+                return;
+            }
+            
+            historyList.innerHTML = reviewHistory.slice(0, 5).map(review => `
+                <div class="history-item">
+                    <strong>${review.language}</strong>
+                    <small>${review.date}</small>
+                    <div>Score: ${review.score}% | ${review.complexity}</div>
+                </div>
+            `).join('');
+        }
+        
+        // Update stats
+        function updateStats() {
+            document.getElementById('reviewCount').innerText = reviewHistory.length;
+            document.getElementById('statTotal').innerText = reviewHistory.length;
+            
+            if (currentResult) {
+                document.getElementById('statQuality').innerText = currentResult.score + '%';
+                document.getElementById('statSuggestions').innerText = currentResult.suggestionsCount || 0;
+            }
+        }
+        
+        // Clear all history
+        function clearAllHistory() {
+            reviewHistory = [];
+            saveHistory();
+            showToast('All history cleared', 'info');
+        }
+        
+        // Show toast notification
         function showToast(message, type) {
             const toast = document.createElement('div');
             toast.textContent = message;
@@ -600,311 +568,380 @@ body {
             toast.style.right = '20px';
             toast.style.padding = '12px 20px';
             toast.style.borderRadius = '10px';
-            toast.style.backgroundColor = type === 'success' ? '#059669' : '#3b82f6';
+            toast.style.backgroundColor = type === 'success' ? '#10b981' : (type === 'error' ? '#ef4444' : '#3b82f6');
             toast.style.color = 'white';
             toast.style.zIndex = '1000';
             toast.style.animation = 'fadeIn 0.3s ease';
-            toast.style.boxShadow = '0 4px 12px rgba(0,0,0,0.15)';
             document.body.appendChild(toast);
             setTimeout(() => toast.remove(), 3000);
         }
         
+        // Auto-detect language
+        function detectLanguage(code) {
+            if (!code.trim()) return '';
+            
+            const patterns = {
+                python: /def |print\(|import |from |class .*:|input\(/,
+                javascript: /function |const |let |=>|console\.log/,
+                java: /public class |System\.out\.println|void main/,
+                csharp: /using System;|Console\.WriteLine|namespace /,
+                cpp: /#include <iostream>|using namespace std|cout <</,
+                go: /package main|func main|fmt\.Println/,
+                rust: /fn main\(\)|println!|let mut/,
+                ruby: /def |end$|puts |require /
+            };
+            
+            for (const [lang, pattern] of Object.entries(patterns)) {
+                if (pattern.test(code)) {
+                    return lang;
+                }
+            }
+            return '';
+        }
+        
+        // Update language display
+        function updateLanguageDisplay() {
+            const select = document.getElementById('languageSelect');
+            const code = document.getElementById('codeInput').value;
+            const badge = document.getElementById('detectedBadge');
+            
+            if (select.value === 'auto') {
+                const detected = detectLanguage(code);
+                if (detected) {
+                    badge.style.display = 'inline-block';
+                    badge.textContent = `Detected: ${detected}`;
+                    document.getElementById('editorLangLabel').innerHTML = `(${detected.toUpperCase()})`;
+                } else {
+                    badge.style.display = 'none';
+                    document.getElementById('editorLangLabel').innerHTML = `(AUTO)`;
+                }
+            } else {
+                badge.style.display = 'none';
+                document.getElementById('editorLangLabel').innerHTML = `(${select.value.toUpperCase()})`;
+            }
+        }
+        
+        // Examples
+        const examples = {
+            python: `def fibonacci(n):
+    if n <= 1:
+        return n
+    return fibonacci(n-1) + fibonacci(n-2)
+
+print(fibonacci(10))`,
+            javascript: `function fibonacci(n) {
+    if (n <= 1) return n;
+    return fibonacci(n-1) + fibonacci(n-2);
+}
+console.log(fibonacci(10));`,
+            java: `public class Main {
+    public static int fibonacci(int n) {
+        if (n <= 1) return n;
+        return fibonacci(n-1) + fibonacci(n-2);
+    }
+    public static void main(String[] args) {
+        System.out.println(fibonacci(10));
+    }
+}`,
+            csharp: `using System;
+class Program {
+    static int Fibonacci(int n) {
+        if (n <= 1) return n;
+        return Fibonacci(n-1) + Fibonacci(n-2);
+    }
+    static void Main() {
+        Console.WriteLine(Fibonacci(10));
+    }
+}`,
+            cpp: `#include <iostream>
+using namespace std;
+int fibonacci(int n) {
+    if (n <= 1) return n;
+    return fibonacci(n-1) + fibonacci(n-2);
+}
+int main() {
+    cout << fibonacci(10) << endl;
+    return 0;
+}`,
+            go: `package main
+import "fmt"
+func fibonacci(n int) int {
+    if n <= 1 { return n }
+    return fibonacci(n-1) + fibonacci(n-2)
+}
+func main() {
+    fmt.Println(fibonacci(10))
+}`,
+            rust: `fn fibonacci(n: u32) -> u32 {
+    match n {
+        0 => 0,
+        1 => 1,
+        _ => fibonacci(n-1) + fibonacci(n-2),
+    }
+}
+fn main() {
+    println!("{}", fibonacci(10));
+}`,
+            ruby: `def fibonacci(n)
+    return n if n <= 1
+    fibonacci(n-1) + fibonacci(n-2)
+end
+puts fibonacci(10)`
+        };
+        
+        function loadExample() {
+            const select = document.getElementById('languageSelect');
+            let lang = select.value;
+            
+            if (lang === 'auto') {
+                const code = document.getElementById('codeInput').value;
+                const detected = detectLanguage(code);
+                lang = detected || 'python';
+            }
+            
+            const example = examples[lang];
+            if (example) {
+                document.getElementById('codeInput').value = example;
+                updateLanguageDisplay();
+                showToast('Example loaded!', 'success');
+            }
+        }
+        
+        function clearCode() {
+            document.getElementById('codeInput').value = '';
+            document.getElementById('resultsContainer').innerHTML = `
+                <div class="empty-state">
+                    <div class="emoji">✨</div>
+                    <p>Select a language, write code, and click "Review Code"</p>
+                </div>
+            `;
+            showToast('Editor cleared', 'info');
+        }
+        
+        function toggleTheme() {
+            // Theme toggle placeholder
+            showToast('Theme toggle coming soon', 'info');
+        }
+        
         function analyzeCode() {
             const code = document.getElementById('codeInput').value;
-            const language = document.getElementById('languageSelect').value;
+            let language = document.getElementById('languageSelect').value;
             
             if (!code.trim()) {
-                document.getElementById('resultsContainer').innerHTML = `
-                    <div class="results">
-                        <div class="bug">❌ Please write some code to review</div>
-                    </div>
-                `;
+                showToast('Please write some code to review', 'error');
                 return;
+            }
+            
+            if (language === 'auto') {
+                language = detectLanguage(code);
+                if (!language) {
+                    showToast('Could not detect language. Please select manually.', 'error');
+                    return;
+                }
             }
             
             // Show loading
             document.getElementById('resultsContainer').innerHTML = `
-                <div class="results">
-                    <div class="loading">
-                        <div class="spinner"></div>
-                        <p>🔍 Analyzing your code...</p>
-                        <p style="font-size: 12px; color: #999; margin-top: 10px;">Checking for bugs, security issues, and improvements</p>
-                    </div>
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p style="color: #94a3b8;">Analyzing your code...</p>
                 </div>
             `;
             
-            // Simulate analysis (fast)
             setTimeout(() => {
-                const analysis = analyzeCodeLocally(code, language);
-                displayResults(analysis);
-                analysisCount++;
+                const analysis = performAnalysis(code, language);
+                displayResults(analysis, language);
+                
+                // Save to history
+                const newReview = {
+                    id: Date.now(),
+                    language: language,
+                    date: new Date().toLocaleString(),
+                    score: analysis.score,
+                    complexity: analysis.complexity
+                };
+                reviewHistory.unshift(newReview);
+                saveHistory();
+                currentResult = analysis;
                 updateStats();
+                
+                showToast('Analysis complete!', 'success');
             }, 500);
         }
         
-        function analyzeCodeLocally(code, language) {
+        function performAnalysis(code, language) {
             const bugs = [];
             const suggestions = [];
             let score = 85;
             const lines = code.split('\n').length;
-            const codeLength = code.length;
             
-            // Security checks (all languages)
-            if (code.includes('eval(') || code.includes('eval (')) {
-                bugs.push("🔴 SECURITY: eval() usage detected - can lead to code injection attacks");
-                score -= 25;
-            }
-            
-            if (code.includes('password') || code.includes('passwd') || code.includes('secret')) {
-                suggestions.push("🔒 Security: Hardcoded credentials detected - use environment variables");
-            }
-            
-            // Language-specific bug detection
+            // Language-specific checks
             if (language === 'python') {
                 if (code.includes('/ 0') || code.includes('/0')) {
-                    bugs.push("❌ Division by zero detected! This will crash at runtime.");
+                    bugs.push("Division by zero detected! This will crash.");
                     score -= 25;
                 }
                 if (code.includes('input(') && !code.includes('try')) {
-                    suggestions.push("💡 Add try/except blocks to handle user input errors");
+                    suggestions.push("Add try/except blocks to handle user input errors");
                 }
-                if (!code.includes('def') && codeLength > 300) {
-                    suggestions.push("💡 Consider breaking code into functions for better organization");
-                }
-                if (!code.includes('#') && codeLength > 100) {
-                    suggestions.push("💡 Add comments to explain complex logic");
+                if (!code.includes('#') && code.length > 200) {
+                    suggestions.push("Add comments to explain complex logic");
                 }
                 if (code.includes('except:') && !code.includes('Exception')) {
-                    bugs.push("⚠️ Bare except clause - specify exception type (except Exception as e:)");
+                    bugs.push("Bare except clause - specify exception type");
                     score -= 10;
                 }
-                if (code.includes('print(') && codeLength > 200) {
-                    suggestions.push("💡 Consider using logging module instead of print() for production");
+                if (code.includes('print(')) {
+                    suggestions.push("Consider using logging instead of print() for production");
                 }
             }
             else if (language === 'javascript') {
                 if (code.includes('var ')) {
-                    bugs.push("⚠️ Using 'var' - use 'let' or 'const' instead (better scoping)");
+                    bugs.push("Using 'var' - use 'let' or 'const' instead");
                     score -= 5;
                 }
                 if (code.includes('==') && !code.includes('===')) {
-                    bugs.push("⚠️ Use === for strict equality to avoid type coercion bugs");
+                    bugs.push("Use === for strict equality to avoid type coercion");
                     score -= 10;
                 }
                 if (code.includes('console.log')) {
-                    suggestions.push("💡 Remove console.log statements in production code");
-                }
-                if (!code.includes(';') && codeLength > 100) {
-                    suggestions.push("💡 Add semicolons at end of statements for consistency");
+                    suggestions.push("Remove console.log statements in production");
                 }
             }
             else if (language === 'java') {
                 if (code.includes('System.out.println') && !code.includes('public static void main')) {
-                    bugs.push("❌ Code outside main method won't execute");
+                    bugs.push("Code outside main method won't execute");
                     score -= 20;
-                }
-                if (code.includes('Scanner') && !code.includes('import java.util.Scanner')) {
-                    bugs.push("❌ Missing import: java.util.Scanner");
-                    score -= 15;
-                }
-                if (!code.includes('public class')) {
-                    bugs.push("⚠️ Code should be inside a public class");
-                    score -= 10;
                 }
             }
             else if (language === 'csharp') {
                 if (code.includes('Console.WriteLine') && !code.includes('using System;')) {
-                    bugs.push("❌ Missing 'using System;' statement");
+                    bugs.push("Missing 'using System;' statement");
                     score -= 15;
-                }
-                if (code.includes('static void Main') && !code.includes('string[] args')) {
-                    bugs.push("⚠️ Main should be: static void Main(string[] args)");
-                    score -= 5;
                 }
             }
             else if (language === 'cpp') {
                 if (code.includes('new ') && !code.includes('delete')) {
-                    bugs.push("⚠️ Potential memory leak - allocated memory not freed with delete");
+                    bugs.push("Potential memory leak - allocated memory not freed");
                     score -= 10;
-                }
-                if (!code.includes('return 0') && code.includes('int main')) {
-                    bugs.push("⚠️ Missing 'return 0;' at end of main function");
-                    score -= 5;
-                }
-                if (code.includes('using namespace std')) {
-                    suggestions.push("💡 Avoid 'using namespace std' - use std:: prefix instead");
                 }
             }
             else if (language === 'go') {
                 if (code.includes('err') && !code.includes('if err')) {
-                    bugs.push("⚠️ Error returned but not checked - handle with 'if err != nil'");
+                    bugs.push("Error returned but not checked");
                     score -= 10;
-                }
-                if (code.includes('func main') && !code.includes('package main')) {
-                    bugs.push("❌ Missing 'package main' declaration");
-                    score -= 15;
                 }
             }
             else if (language === 'rust') {
                 if (code.includes('unwrap()')) {
-                    bugs.push("⚠️ Avoid unwrap() - use match or ? operator for error handling");
+                    bugs.push("Avoid unwrap() - use match or ? operator");
                     score -= 10;
-                }
-                if (!code.includes('fn main') && code.includes('main')) {
-                    bugs.push("⚠️ Main function should be: fn main()");
-                    score -= 5;
-                }
-            }
-            else if (language === 'ruby') {
-                if (code.includes('def ') && code.split('def ').length !== code.split('end').length) {
-                    bugs.push("❌ Missing 'end' keyword - function not properly closed");
-                    score -= 15;
-                }
-                if (code.includes('puts') && codeLength > 200) {
-                    suggestions.push("💡 Consider using Rails logger in production");
-                }
-            }
-            else if (language === 'html') {
-                if (code.includes('<div') && !code.includes('</div>')) {
-                    bugs.push("⚠️ Unclosed div tag - check your HTML structure");
-                    score -= 10;
-                }
-                if (!code.includes('<!DOCTYPE html>')) {
-                    suggestions.push("💡 Add <!DOCTYPE html> for standards mode");
-                }
-            }
-            else if (language === 'css') {
-                if (code.includes('color:') && !code.includes('#')) {
-                    suggestions.push("💡 Consider using CSS variables for maintainable colors");
                 }
             }
             
-            // Check for TODO/FIXME
+            // General checks
             if (code.includes('TODO')) {
-                suggestions.push("📝 Complete TODO items before deployment");
+                suggestions.push("Complete TODO items before deployment");
             }
             if (code.includes('FIXME')) {
-                suggestions.push("🔧 Fix FIXME items");
+                suggestions.push("Fix FIXME items");
             }
             
-            // Check for unmatched brackets/parentheses
+            // Check for unmatched braces
             const openBraces = (code.match(/\{/g) || []).length;
             const closeBraces = (code.match(/\}/g) || []).length;
             if (openBraces !== closeBraces) {
-                bugs.push(`❌ Unmatched braces: ${openBraces} opening { but ${closeBraces} closing }`);
+                bugs.push(`Unmatched braces: ${openBraces} opening { but ${closeBraces} closing }`);
                 score -= 15;
             }
             
             const openParens = (code.match(/\(/g) || []).length;
             const closeParens = (code.match(/\)/g) || []).length;
             if (openParens !== closeParens) {
-                bugs.push(`⚠️ Unmatched parentheses: ${openParens} opening ( but ${closeParens} closing )`);
+                bugs.push(`Unmatched parentheses: ${openParens} opening ( but ${closeParens} closing )`);
                 score -= 10;
             }
             
-            // Code quality suggestions
-            if (lines > 30) {
-                suggestions.push("💡 Consider breaking this file into smaller modules or functions");
-            }
-            
-            if (codeLength < 100 && lines > 2) {
-                suggestions.push("💡 Add more functionality to your code");
-            }
-            
-            // Determine complexity
+            // Complexity
             let complexity = "Simple";
-            if (lines > 15 || codeLength > 500) complexity = "Moderate";
-            if (lines > 40 || codeLength > 1000) complexity = "Complex";
+            if (lines > 20) complexity = "Moderate";
+            if (lines > 40) complexity = "Complex";
             
             // Ensure at least one suggestion
             if (suggestions.length === 0) {
-                suggestions.push("💡 Code looks good! Consider adding unit tests");
-                suggestions.push("💡 Add comments for better maintainability");
+                suggestions.push("Code looks good! Consider adding unit tests");
+                suggestions.push("Add comments for better maintainability");
             }
             
             // Ensure at least one bug message
             if (bugs.length === 0) {
-                bugs.push("✅ No critical bugs detected. Well written code!");
+                bugs.push("No critical bugs detected. Well done!");
             }
             
-            // Calculate final score
             score = Math.max(0, Math.min(100, score));
             
-            return { complexity, score, bugs, suggestions, lines, codeLength };
+            return { complexity, score, bugs, suggestions, lines, suggestionsCount: suggestions.length };
         }
         
-        function displayResults(analysis) {
-            const qualityColor = analysis.score >= 80 ? '#059669' : (analysis.score >= 60 ? '#d97706' : '#dc2626');
+        function displayResults(analysis, language) {
+            const qualityColor = analysis.score >= 80 ? '#10b981' : (analysis.score >= 60 ? '#f59e0b' : '#ef4444');
+            const complexityClass = `complexity-${analysis.complexity.toLowerCase()}`;
             
             const html = `
-                <div class="results">
-                    <div class="score-circle">
-                        <div style="font-size: 14px; opacity: 0.9;">Quality Score</div>
-                        <div class="score-number">${analysis.score}%</div>
-                        <div class="quality-bar" style="background: rgba(255,255,255,0.3);">
-                            <div class="quality-fill" style="width: ${analysis.score}%; background: white;"></div>
-                        </div>
+                <div class="status-badge status-success">
+                    ✅ Analysis Complete
+                </div>
+                
+                <div class="complexity-box">
+                    <strong>📊 Complexity:</strong>
+                    <div class="complexity-value ${complexityClass}">${analysis.complexity}</div>
+                </div>
+                
+                <div class="score-section">
+                    <strong>🎯 Code Quality Score:</strong>
+                    <div class="score-value ${analysis.score >= 80 ? 'score-good' : (analysis.score >= 60 ? 'score-average' : 'score-bad')}">${analysis.score}/100</div>
+                    <div class="quality-bar">
+                        <div class="quality-fill" style="width: ${analysis.score}%; background: ${qualityColor};"></div>
                     </div>
-                    
-                    <div style="margin-bottom: 20px;">
-                        <p><strong>📊 Complexity:</strong> <span class="complexity-${analysis.complexity.toLowerCase()}">${analysis.complexity}</span></p>
-                        <p><strong>📏 Lines of Code:</strong> ${analysis.lines}</p>
-                        <p><strong>📝 Code Length:</strong> ${analysis.codeLength} characters</p>
-                    </div>
-                    
-                    <div style="margin-bottom: 20px;">
-                        <p><strong>🎯 Quality Score:</strong> ${analysis.score}/100</p>
-                        <div class="quality-bar">
-                            <div class="quality-fill" style="width: ${analysis.score}%; background: ${qualityColor};"></div>
-                        </div>
-                    </div>
-                    
-                    <div style="margin-bottom: 20px;">
-                        <p><strong>💡 Suggestions & Improvements:</strong></p>
-                        ${analysis.suggestions.map(s => `<div class="suggestion">${s}</div>`).join('')}
-                    </div>
-                    
-                    <div>
-                        <p><strong>🐛 Issues Detected:</strong></p>
-                        ${analysis.bugs.map(b => `<div class="bug">${b}</div>`).join('')}
-                    </div>
-                    
-                    <div class="info" style="margin-top: 15px; font-size: 12px;">
-                        🔍 Analysis completed | ${new Date().toLocaleTimeString()} | ${analysisCount + 1} total reviews
-                    </div>
+                </div>
+                
+                <div class="suggestions-list">
+                    <h3>💡 Suggestions</h3>
+                    ${analysis.suggestions.map(s => `<div class="suggestion-item">${s}</div>`).join('')}
+                </div>
+                
+                <div class="bugs-list">
+                    <h3>🐛 Potential Bugs</h3>
+                    ${analysis.bugs.map(b => `<div class="bug-item">${b}</div>`).join('')}
                 </div>
             `;
             
             document.getElementById('resultsContainer').innerHTML = html;
         }
         
-        function updateStats() {
-            // Update stats in background
-            const statsBar = document.querySelector('.stats-bar');
-            if (statsBar) {
-                statsBar.innerHTML = `
-                    <div class="stat-card">📊 ${analysisCount} Reviews</div>
-                    <div class="stat-card">🔍 10+ Languages</div>
-                    <div class="stat-card">⚡ Instant Results</div>
-                `;
-            }
-        }
+        // Event listeners
+        document.getElementById('languageSelect').addEventListener('change', updateLanguageDisplay);
+        document.getElementById('codeInput').addEventListener('input', updateLanguageDisplay);
         
-        // Add animation styles
+        // Initialize
+        loadHistory();
+        updateLanguageDisplay();
+        
+        // Load example on page load
+        setTimeout(() => loadExample(), 100);
+        
+        // Add animation style
         const style = document.createElement('style');
         style.textContent = `
             @keyframes fadeIn {
-                from { opacity: 0; transform: translateY(20px); }
+                from { opacity: 0; transform: translateY(10px); }
                 to { opacity: 1; transform: translateY(0); }
             }
-            .results {
+            .results-container > div {
                 animation: fadeIn 0.3s ease;
             }
         `;
         document.head.appendChild(style);
-        
-        // Load example on page load
-        setTimeout(() => loadExample(), 100);
     </script>
 </body>
 </html>
