@@ -248,6 +248,14 @@
         
         .editor-container {
             height: 500px;
+            width: 100%;
+            padding: 16px;
+            background: #0f172a;
+            color: #e2e8f0;
+            border: none;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            resize: vertical;
         }
         
         .results-container {
@@ -388,6 +396,11 @@
             to { transform: rotate(360deg); }
         }
         
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
         .detected-badge {
             background: #10b981;
             color: white;
@@ -395,11 +408,11 @@
             border-radius: 20px;
             font-size: 12px;
             margin-left: 10px;
+            display: inline-block;
         }
         
         @media (max-width: 768px) {
             .sidebar {
-                width: 0;
                 display: none;
             }
             .main-content {
@@ -458,7 +471,6 @@
                     <div class="button-group">
                         <button class="btn btn-primary" onclick="loadExample()">📝 Example</button>
                         <button class="btn btn-secondary" onclick="clearCode()">🗑️ Clear</button>
-                        <button class="btn btn-secondary" onclick="toggleTheme()">🌙 Dark</button>
                         <button class="btn btn-primary" onclick="analyzeCode()" id="reviewBtn">🚀 Review Code</button>
                     </div>
                 </div>
@@ -485,7 +497,7 @@
                     <!-- Code Editor -->
                     <div class="editor-card">
                         <div class="card-header">📝 Code Editor <span id="editorLangLabel">(PYTHON)</span></div>
-                        <textarea id="codeInput" class="editor-container" placeholder="Write or paste your code here..." style="width: 100%; padding: 16px; background: #0f172a; color: #e2e8f0; border: none; font-family: 'Courier New', monospace; font-size: 14px; resize: vertical;"></textarea>
+                        <textarea id="codeInput" class="editor-container" placeholder="Write or paste your code here..."></textarea>
                     </div>
                     
                     <!-- Results Panel -->
@@ -670,7 +682,7 @@ func fibonacci(n int) int {
     return fibonacci(n-1) + fibonacci(n-2)
 }
 func main() {
-    fmt.Println(fibonacci(10))
+    fmt.Println(fibonacci(10));
 }`,
             rust: `fn fibonacci(n: u32) -> u32 {
     match n {
@@ -694,9 +706,7 @@ puts fibonacci(10)`
             let lang = select.value;
             
             if (lang === 'auto') {
-                const code = document.getElementById('codeInput').value;
-                const detected = detectLanguage(code);
-                lang = detected || 'python';
+                lang = 'python';
             }
             
             const example = examples[lang];
@@ -716,11 +726,6 @@ puts fibonacci(10)`
                 </div>
             `;
             showToast('Editor cleared', 'info');
-        }
-        
-        function toggleTheme() {
-            // Theme toggle placeholder
-            showToast('Theme toggle coming soon', 'info');
         }
         
         function analyzeCode() {
@@ -791,9 +796,6 @@ puts fibonacci(10)`
                     bugs.push("Bare except clause - specify exception type");
                     score -= 10;
                 }
-                if (code.includes('print(')) {
-                    suggestions.push("Consider using logging instead of print() for production");
-                }
             }
             else if (language === 'javascript') {
                 if (code.includes('var ')) {
@@ -801,17 +803,11 @@ puts fibonacci(10)`
                     score -= 5;
                 }
                 if (code.includes('==') && !code.includes('===')) {
-                    bugs.push("Use === for strict equality to avoid type coercion");
+                    bugs.push("Use === for strict equality");
                     score -= 10;
                 }
                 if (code.includes('console.log')) {
-                    suggestions.push("Remove console.log statements in production");
-                }
-            }
-            else if (language === 'java') {
-                if (code.includes('System.out.println') && !code.includes('public static void main')) {
-                    bugs.push("Code outside main method won't execute");
-                    score -= 20;
+                    suggestions.push("Remove console.log in production");
                 }
             }
             else if (language === 'csharp') {
@@ -819,32 +815,6 @@ puts fibonacci(10)`
                     bugs.push("Missing 'using System;' statement");
                     score -= 15;
                 }
-            }
-            else if (language === 'cpp') {
-                if (code.includes('new ') && !code.includes('delete')) {
-                    bugs.push("Potential memory leak - allocated memory not freed");
-                    score -= 10;
-                }
-            }
-            else if (language === 'go') {
-                if (code.includes('err') && !code.includes('if err')) {
-                    bugs.push("Error returned but not checked");
-                    score -= 10;
-                }
-            }
-            else if (language === 'rust') {
-                if (code.includes('unwrap()')) {
-                    bugs.push("Avoid unwrap() - use match or ? operator");
-                    score -= 10;
-                }
-            }
-            
-            // General checks
-            if (code.includes('TODO')) {
-                suggestions.push("Complete TODO items before deployment");
-            }
-            if (code.includes('FIXME')) {
-                suggestions.push("Fix FIXME items");
             }
             
             // Check for unmatched braces
@@ -855,25 +825,16 @@ puts fibonacci(10)`
                 score -= 15;
             }
             
-            const openParens = (code.match(/\(/g) || []).length;
-            const closeParens = (code.match(/\)/g) || []).length;
-            if (openParens !== closeParens) {
-                bugs.push(`Unmatched parentheses: ${openParens} opening ( but ${closeParens} closing )`);
-                score -= 10;
-            }
-            
             // Complexity
             let complexity = "Simple";
             if (lines > 20) complexity = "Moderate";
             if (lines > 40) complexity = "Complex";
             
-            // Ensure at least one suggestion
             if (suggestions.length === 0) {
                 suggestions.push("Code looks good! Consider adding unit tests");
                 suggestions.push("Add comments for better maintainability");
             }
             
-            // Ensure at least one bug message
             if (bugs.length === 0) {
                 bugs.push("No critical bugs detected. Well done!");
             }
@@ -898,7 +859,7 @@ puts fibonacci(10)`
                 </div>
                 
                 <div class="score-section">
-                    <strong>🎯 Code Quality Score:</strong>
+                    <strong>🎯 Quality Score:</strong>
                     <div class="score-value ${analysis.score >= 80 ? 'score-good' : (analysis.score >= 60 ? 'score-average' : 'score-bad')}">${analysis.score}/100</div>
                     <div class="quality-bar">
                         <div class="quality-fill" style="width: ${analysis.score}%; background: ${qualityColor};"></div>
@@ -911,7 +872,7 @@ puts fibonacci(10)`
                 </div>
                 
                 <div class="bugs-list">
-                    <h3>🐛 Potential Bugs</h3>
+                    <h3>🐛 Issues Detected</h3>
                     ${analysis.bugs.map(b => `<div class="bug-item">${b}</div>`).join('')}
                 </div>
             `;
@@ -929,19 +890,6 @@ puts fibonacci(10)`
         
         // Load example on page load
         setTimeout(() => loadExample(), 100);
-        
-        // Add animation style
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes fadeIn {
-                from { opacity: 0; transform: translateY(10px); }
-                to { opacity: 1; transform: translateY(0); }
-            }
-            .results-container > div {
-                animation: fadeIn 0.3s ease;
-            }
-        `;
-        document.head.appendChild(style);
     </script>
 </body>
 </html>
